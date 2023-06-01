@@ -1,0 +1,32 @@
+{% extends 'dash_base.html' %} 
+
+{% block body %}
+
+<div class="col-sm-10">
+       
+            <div class="row text-center">
+
+                <div class="col-md-11 mb-4">
+          
+                    
+                    <img class="rounded-circle" alt="100x100" src="\{{image}}" style="width: 200px;height: 200px;"
+                    data-holder-rendered="true">
+                    <h2 class="my-5 h2">{{doctor.name}}</h2>
+          
+                </div>
+            </div>
+            <br>
+                <p>{{doctor.desc}}</p>
+            
+            <br>
+            
+                    
+                    <form action="/book-appointment-{{doctor.id}}-{{user.id}}">
+                        <input class="btn btn-info" type="submit" value="Book an Appointment" />
+                    </form>
+                    
+           
+            
+</div>
+ 
+{%endblock%}

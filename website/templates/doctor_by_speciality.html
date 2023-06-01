@@ -1,0 +1,36 @@
+{% extends 'dash_base.html' %} 
+
+{% block body %}
+
+
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">Email</th>
+      </tr>
+    </thead>
+    <tbody>
+        {%for doc in doctor%}
+
+        <tr>
+          <th scope="row" >1</th>
+          <td>{{doc.name}}</td>
+          <td>{{doc.email}}</td>
+          <td>{{doc.age}}</td>
+          <td><a href="get-doctor-{{doc.name}}"><button class="btn btn-info">Go to Profile</button></a></td>
+        </tr>
+        {%endfor%}
+      
+    </tbody>
+  </table>
+
+
+
+
+
+
+
+{%endblock%}

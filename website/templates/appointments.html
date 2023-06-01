@@ -1,0 +1,54 @@
+{% extends 'dash_base.html' %} 
+{%block body%}
+{% with messages = get_flashed_messages(with_categories = true) %}
+    {% if messages %}{% for category,message in messages %}{%if category == 'error'%}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{message}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {%else%}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{message}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {%endif%}{%endfor%}{%endif%}{%endwith%}
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Patient</th>
+            <th scope="col">Doctor</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">Statuus</th>
+
+          </tr>
+        </thead>
+        <tbody>
+            {%for appointment in appointments%}
+
+            <tr>
+              <th scope="row" ></th>
+              <td>{{appointment.patient.name}}</td>
+              <td>{{appointment.doctor.name}}</td>
+              <td>{{appointment.date}}</td> 
+              <td>{{appointment.time}}</td>
+              <td>{{appointment.status}}</td> 
+              {%if request.path.startswith('doctor-')%}
+              <td>
+                <form method="post" action="doctor-update-appointment-{{appointment.patient_id}}-{{appointment.doctor_id}}">
+                  <input class="btn btn-sm btn-success" type="submit" value="accept" name="button" />
+                  <input class="btn btn-sm btn-danger"  type="submit" value="decline" name="button"/>
+              </form>
+            </tr>
+            {%endif%}
+          {%endfor%}
+          
+        </tbody>
+      </table>
+
+{%endblock%}

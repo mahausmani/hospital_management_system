@@ -1,0 +1,36 @@
+{% extends 'dash_base.html' %} 
+{%block content%}
+
+{%endblock%}
+{% block body %}
+
+
+    <div class="col-sm-10" >
+      <h2>Dashboard</h2>
+      <br>
+        <div class="row bg-light mt-5 "> 
+          <div class="col-md-4 col-sm-2 d-flex flex-column align-items-center">
+            <div class="glyphicon glyphicon-user text-info" style="font-size:100px;"></div>
+            <div>My Profile</div>
+            {%if request.path.startswith('/doctor-')%}
+            <div><a href="doctor-profile">update profile</a></div>
+            {%else%}
+            <div><a href="patient-profile">update profile</a></div>
+            {%endif%}
+          </div>
+          <div class="col-md-4 col-sm-2 d-flex flex-column align-items-center">
+            <div class="glyphicon glyphicon-check text-info" style="font-size:100px;"></div>
+            <div>Manage</div>
+            <div><a href="">View my Appointments</a></div>
+          </div>
+          <div class="col-md-4 col-sm-2 d-flex flex-column align-items-center">
+            <div class="glyphicon glyphicon-paperclip text-info" style="font-size:100px;"></div>
+            <div>My Appointments</div>
+            <div><a href="">Book an Appointment</a></div>
+          </div>
+
+        </div>
+      </div>
+
+
+{%endblock%}

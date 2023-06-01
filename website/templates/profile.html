@@ -1,0 +1,63 @@
+{% extends 'dash_base.html' %} 
+
+{% block body %}
+<div class="d-flex align-items-center justify-content-center col-sm-10" style="height: 100vh;" >
+    <div class="border border-dark bg-white p-4" style="min-width: 70%;">
+        <h2>Update Profile</h2>
+        <form method = "POST">
+            <input type="hidden"name="id" value="{{user.id}}">
+            <div class="form-group">
+                <label for="exampleInputEmail1"> User Name: </label>
+                <input type="text" class="form-control" id="exampleInputEmail1" name="name" value="{{user.name}}">
+                
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address: </label>
+                <input name = "email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value="{{user.email}}">
+            
+            </div>
+            
+            {%if request.path=='/doctor-profile'%}
+            <div class="form-group">
+                <label for="work">work* (You cannot change your speciality. Consult with the admin first.)</label>
+                <select class="form-control form-control-lg" name="work">
+                    <option>cardio</option>
+                    <option>neuro</option>
+                    <option>peds</option>
+                    <option>gynacology</option>
+                    <option>urology</option>
+                    <option>general-surgery</option>
+                    <option>dermatology</option>
+                    <option>ortho</option>
+                    <option>plastics</option>
+                    <option>other</option> 
+                </select>
+            </div>
+            <label for="about">Update Profile Pictue</label>
+            <input type = "file" name = "file" />
+            <label for="about">Provide a brief description about yourself</label>
+            <div class="form-group">
+                <textarea name = "about" class="form-control" value = "" id="exampleFormControlTextarea1" rows="12">{{user.desc}}</textarea>
+              </div>
+           
+
+       
+        {%else%}
+        <div class="form-group">
+            <label for="age">age*</label>
+            <input name="age" value = {{user.age}} type="number" class="form-control" id="work" >
+        </div>
+        <div class="form-group">
+            <label for="gender">gender</label>
+            <input name="gender" value = {{user.gender}} type="text" class="form-control" id="work" >
+        </div>
+        
+        
+        {%endif%}
+
+            <button type="submit" class="btn btn-dark">Update Profile</button>
+        </form>
+        
+    </div>
+</div>
+{%endblock%}
