@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 # from flask_user import UserManager
 
-
 db = SQLAlchemy()
 db_name = "database.db"
 
@@ -23,9 +22,10 @@ def create_app():
     # if not path.exists('website/' + db_name):
     #     db.create_all(app=app)
 
-    @app.before_first_request
+    @app.before_request
     def create_tables():
         db.create_all()
+
     login_manager = LoginManager()
     # user_manager = UserManager(app, db, User)
     login_manager.login_view = 'view.home'

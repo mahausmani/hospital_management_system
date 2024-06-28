@@ -21,7 +21,10 @@ def home():
     return render_template('home.html')
 
 
-@view.route('/patient-signup', methods=['GET', 'POST'],)
+@view.route(
+    '/patient-signup',
+    methods=['GET', 'POST'],
+)
 def patient_signup():
     if request.method == 'POST':
         email = request.form.get('email')
@@ -44,9 +47,11 @@ def patient_signup():
         elif password1 != password2:
             flash("passwords don't match", category="error")
         else:
-            user = Patient(email=email, name=name, password=generate_password_hash(
-                password1, method='sha256'), gender=gender, age=age
-            )
+            user = Patient(email=email,
+                           name=name,
+                           password=generate_password_hash(password1, method='pbkdf2:sha256'),
+                           gender=gender,
+                           age=age)
             db.session.add(user)
             db.session.commit()
             flash("acount created successfully!", category="success")
@@ -62,8 +67,7 @@ def patient_login():
         patient = Patient.query.filter_by(email=email).first()
         print(patient)
         if not patient:
-            flash(
-                "The account does not exist. Please create another account!", category="error")
+            flash("The account does not exist. Please create another account!", category="error")
         else:
             if check_password_hash(patient.password, password):
                 flash("Login successful!", category="success")
@@ -126,8 +130,7 @@ def doctor_login():
         doctor = Doctor.query.filter_by(email=email).first()
         print(doctor)
         if not doctor:
-            flash(
-                "The account does not exist. Please create another account!", category="error")
+            flash("The account does not exist. Please create another account!", category="error")
         else:
             if check_password_hash(doctor.password, password):
                 flash("Login successful!", category="success")
@@ -152,8 +155,7 @@ def doctor_signup():
         basedir = os.path.abspath(os.path.dirname(__file__))
 
         filename = secure_filename(f.filename)
-        f.save(os.path.join(
-            basedir, current_app.config['UPLOAD_FOLDER'], filename))
+        f.save(os.path.join(basedir, current_app.config['UPLOAD_FOLDER'], filename))
         # f.save(os.path.join(current_app.config['UPLOAD_FOLDER'],filename))
         doctor = Doctor.query.filter_by(email=email).first()
 
@@ -168,9 +170,12 @@ def doctor_signup():
         elif password1 != password2:
             flash("passwords don't match", category="error")
         else:
-            user = Doctor(email=email, name=name, password=generate_password_hash(
-
-                password1, method='sha256'), speciality=work, desc=desc, file_name=os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            user = Doctor(email=email,
+                          name=name,
+                          password=generate_password_hash(password1, method='pbkdf2:sha256'),
+                          speciality=work,
+                          desc=desc,
+                          file_name=os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
             db.session.add(user)
             db.session.commit()
             flash("acount created successfully!", category="success")
@@ -188,7 +193,7 @@ def allow(speciality):
 
 @view.route("get-doctor-<doc_name>", methods=['GET', 'POST'])
 def get_doctor(doc_name):
-    if request.method=="POST":
+    if request.method == "POST":
         return redirect(url_for())
     doctor = Doctor.query.filter_by(name=doc_name).first()
     if doctor:
@@ -198,16 +203,16 @@ def get_doctor(doc_name):
 
 
 @view.route("/book-appointment-<doc_id>-<user_id>", methods=['GET', 'POST'])
-def book_appointment(doc_id,user_id):
-    if request.method=="POST":
+def book_appointment(doc_id, user_id):
+    if request.method == "POST":
         date = request.form.get('date')
         time = request.form.get('time')
         doctor = Doctor.query.filter_by(id=doc_id).first()
-        a = Appointments(date = date, time = time, status = "Pending")
+        a = Appointments(date=date, time=time, status="Pending")
         patient = Patient.query.filter_by(id=user_id).first()
         a.doctor = doctor
         a.patient = patient
-        patient.appointments.append(a) 
+        patient.appointments.append(a)
         flash("request made! VIEW IN APPOINTMENTS", category="success")
         db.session.commit()
     return render_template('book_appointment.html', user=current_user)
@@ -220,19 +225,18 @@ def show_appointments(user_id):
     if request.path.startswith('/doctor-'):
         doctor = Doctor.query.filter_by(id=user_id).first()
         a = doctor.appointments
-        
+
     else:
         patient = Patient.query.filter_by(id=user_id).first()
         a = patient.appointments
-    
-    
-    return render_template("appointments.html", user=current_user, appointments = a)
+
+    return render_template("appointments.html", user=current_user, appointments=a)
 
 
 @view.route("doctor-update-appointment-<patient_id>-<doctor_id>", methods=['GET', 'POST'])
-def update_appointments(patient_id,doctor_id):
+def update_appointments(patient_id, doctor_id):
     if request.method == 'POST':
-        a = Appointments.query.filter_by(doctor_id=doctor_id,patient_id = patient_id ).first()
+        a = Appointments.query.filter_by(doctor_id=doctor_id, patient_id=patient_id).first()
         if request.form['button'] == 'accept':
             a.status = "Accepted"
         elif request.form['button'] == 'decline':
@@ -240,4 +244,4 @@ def update_appointments(patient_id,doctor_id):
         doctor = Doctor.query.filter_by(id=doctor_id).first()
         a = doctor.appointments
         db.session.commit()
-    return render_template("appointments.html", user=current_user, appointments = a)      
+    return render_template("appointments.html", user=current_user, appointments=a)
